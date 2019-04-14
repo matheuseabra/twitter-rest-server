@@ -13,5 +13,29 @@ module.exports = {
     req.io.emit("tweet", tweet);
 
     return res.json(tweet);
+  },
+
+  async like(req, res) {
+    const tweet = await Tweet.findById(req.params.id);
+
+    tweet.set({ likes: tweet.likes + 1 });
+
+    await tweet.save();
+
+    req.io.emit("like", tweet);
+
+    return res.json(tweet);
+  },
+
+  async retweet(req, res) {
+    const tweet = await Tweet.findById(req.params.id);
+
+    tweet.set({ retweets: tweet.retweets + 1 });
+
+    await tweet.save();
+
+    req.io.emit("retweet", tweet);
+
+    return res.json(tweet);
   }
 };
